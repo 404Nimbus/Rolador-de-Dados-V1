@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rolador RPG</title>
+
+    <style>
+        
+body {
+
+    background-color: #1e1e1e;
+    color: white;
+    font-family: Arial;
+    text-align: center;
+    margin-top: 80px;
+}
+
+h1 {
+
+    margin-bottom: 30px;
+}
+
+select {
+
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+button {
+
+    font-size: 20px;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+
+    transform: scale(1.05);
+}
+
+#resultado {
+
+    margin-top: 40px;
+    font-size: 35px;
+}
+
+.falhaCritica {
+
+    color: red;
+    animation: tremor 0.5s;
+}
+
+.falha {
+
+    color: orange;
+    animation: fade 0.5s;
+}
+
+.sucesso {
+
+    color: lime;
+    animation: brilho 0.5s;
+}
+
+.critico {
+
+    color: gold;
+    animation: pulse 0.5s 3;
+}
+
+
+
+@keyframes tremor {
+
+    0% { transform: translateX(0px); }
+
+    25% { transform: translateX(-5px); }
+
+    50% { transform: translateX(5px); }
+
+    75% { transform: translateX(-5px); }
+
+    100% { transform: translateX(0px); }
+}
+
+
+
+@keyframes fade {
+
+    from { opacity: 0; }
+
+    to { opacity: 1; }
+}
+
+
+
+@keyframes brilho {
+
+    0% { transform: scale(1); }
+
+    50% { transform: scale(1.1); }
+
+    100% { transform: scale(1); }
+}
+
+
+
+@keyframes pulse {
+
+    0% { transform: scale(1); }
+
+    50% { transform: scale(1.1); }
+
+    100% { transform: scale(1); }
+}
+    </style>
+</head>
+
+<body>
+
+    <h1>🎲 Rolador de Dados RPG</h1>
+
+    <p>Escolha um dado:</p>
+
+    <select id="dadoSelecionado">
+
+        <option value="4">d4</option>
+
+        <option value="6">d6</option>
+
+        <option value="8">d8</option>
+
+        <option value="10">d10</option>
+
+        <option value="12">d12</option>
+
+        <option value="20" selected>d20</option>
+
+        <option value="100">d100</option>
+
+    </select>
+
+    <button onclick="rolarDado()">
+        Rolar
+    </button>
+
+    <div id="resultado">
+        Resultado: ?
+    </div>
+
+<script>
+
+    function rolarDado() {
+
+        let lados =
+            Number(document.getElementById("dadoSelecionado").value);
+
+        let resultado =
+            document.getElementById("resultado");
+
+
+
+        resultado.className = "";
+
+
+
+        let velocidade = 50;
+
+        let tempoTotal = 3000;
+
+        let tempoPassado = 0;
+
+
+
+        let numeroFinal =
+            Math.floor(Math.random() * lados) + 1;
+
+
+
+        function animarRolagem() {
+
+            let numeroTemp =
+                Math.floor(Math.random() * lados) + 1;
+
+
+
+            resultado.innerText =
+                "🎲 Resultado do d" + lados +
+                ": " + numeroTemp;
+
+
+
+            tempoPassado += velocidade;
+
+
+
+            if (tempoPassado < tempoTotal) {
+
+                velocidade += 15;
+
+
+
+                setTimeout(animarRolagem, velocidade);
+
+            }
+
+            else {
+
+                mostrarResultadoFinal(numeroFinal, lados);
+
+            }
+
+        }
+
+
+
+        animarRolagem();
+
+    }
+
+
+
+
+
+
+
+    function mostrarResultadoFinal(numero, lados) {
+
+        let resultado =
+            document.getElementById("resultado");
+
+
+
+        resultado.className = "";
+
+
+
+        let texto = "Normal";
+
+
+
+        if (lados == 20) {
+
+            if (numero == 1) {
+
+                texto = "🔴 Falha Crítica";
+                resultado.classList.add("falhaCritica");
+
+            }
+
+            else if (numero >= 2 && numero <= 5) {
+
+                texto = "🟠 Falha";
+                resultado.classList.add("falha");
+
+            }
+
+            else if (numero >= 15 && numero <= 19) {
+
+                texto = "🟢 Sucesso";
+                resultado.classList.add("sucesso");
+
+            }
+
+            else if (numero == 20) {
+
+                texto = "✨ CRÍTICO";
+                resultado.classList.add("critico");
+
+            }
+
+        }
+
+
+
+        resultado.innerText =
+            "🎲 Resultado do d" + lados +
+            ": " + numero +
+            "\n" + texto;
+
+    }
+
+</script>
+
+</body>
+
+</html>
